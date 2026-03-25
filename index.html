@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bugnil Blackskin Pro</title>
+    <title>Bugnil Blackskin Pro - 1-3-2-6 Edition</title>
     <style>
         @import url('https://fonts.googleapis.com');
         body { font-family: 'Kanit', sans-serif; background: #050505; color: white; padding: 10px; margin: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
@@ -16,7 +16,6 @@
         .container::after { content: ""; position: absolute; inset: 5px; background: #0a0a0a; border-radius: 20px; z-index: -1; }
         @keyframes rotate { 100% { transform: rotate(360deg); } }
 
-        .footer-text { text-align: center; margin-top: 15px; font-size: 24px; letter-spacing: 2px; }
         .sparkle-text { background: linear-gradient(90deg, #ff0000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff, #ff0000); background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: sparkle 3s linear infinite; font-weight: 900; }
         @keyframes sparkle { to { background-position: 200% center; } }
         
@@ -30,7 +29,6 @@
 
         .btn-group { display: grid; grid-template-columns: repeat(10, 1fr); gap: 4px; }
         .card-btn { padding: 14px 0; border: none; border-radius: 6px; background: #222; color: white; font-weight: bold; cursor: pointer; font-size: 14px; transition: 0.1s; }
-        .card-btn:active { transform: scale(0.9); }
         .card-btn.active { background: #f1c40f; color: black; box-shadow: 0 0 12px #f1c40f; }
 
         .display-area { margin: 10px 0; padding: 15px; border-radius: 20px; text-align: center; border: 3px solid transparent; position: relative; }
@@ -40,44 +38,46 @@
         .stand { background: rgba(231, 76, 60, 0.12); border-color: #ff4757; color: #ff4757; }
         .double { background: rgba(241, 196, 15, 0.12); border-color: #f1c40f; color: #f1c40f; }
         .split { background: rgba(52, 152, 219, 0.12); border-color: #3498db; color: #3498db; }
-        .surrender { background: rgba(155, 89, 182, 0.12); border-color: #9b59b6; color: #9b59b6; }
 
-        .inner-controls { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-top: 15px; }
-        .btn-action { padding: 10px 0; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; color: white; font-size: 14px; opacity: 0.9; }
+        .inner-controls { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 6px; margin-top: 15px; }
+        .btn-action { padding: 10px 0; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; color: white; font-size: 12px; opacity: 0.9; }
 
         .bet-input { background: #000; border: 1px solid #444; color: #f1c40f; padding: 4px; border-radius: 5px; width: 85%; text-align: center; font-weight: bold; font-family: 'Kanit'; font-size: 13px; }
-        .readonly-input { color: #888; border-color: #222; }
-
+        
         #lockdown { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98); z-index: 9999; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
+        .footer-text { text-align: center; margin-top: 15px; font-size: 24px; letter-spacing: 2px; }
+        
+        /* สเตตัสไม้ 1-3-2-6 */
+        #step-indicator { font-size: 12px; color: #888; margin-top: 5px; letter-spacing: 2px; }
+        .active-step { color: #f1c40f; font-weight: bold; border-bottom: 2px solid #f1c40f; padding-bottom: 2px; }
     </style>
 </head>
 <body>
 
 <div id="lockdown">
     <h1 style="font-size: 50px; margin:0; color:#2ecc71;">🎯 ถึงเป้าแล้ว!</h1>
-    <h1 id="pnl-locked" class="sparkle-text" style="font-size: 80px; margin: 15px 0;">+0</h1>
+    <h1 id="pnl-locked" class="sparkle-text" style="font-size: 80px; margin: 10px 0;">+0</h1>
     <button class="btn-action" style="background:#e74c3c; width: 220px; font-size: 18px;" onclick="unlock()">เล่นต่อ</button>
 </div>
 
 <div class="container">
-    <!-- การเงิน -->
     <div class="zone bet-info-zone">
         <div><div style="font-size:9px;">ทุน</div><input type="number" id="bankroll" class="bet-input" value="1000" onchange="calcGoal()"></div>
-        <div><div style="font-size:9px;">ไม้ 1</div><input type="number" id="bet1" class="bet-input" value="100" oninput="autoCalcBet()"></div>
-        <div><div style="font-size:9px;">ไม้ 2 (Auto)</div><input type="number" id="bet2" class="bet-input readonly-input" value="200" readonly></div>
-        <div style="background: rgba(46,204,113,0.15); border-radius: 6px;"><div style="font-size:9px; color:#2ecc71;">กำไร</div><div id="pnl" style="font-weight:bold; color:#2ecc71; font-size:16px;">0</div></div>
+        <div><div style="font-size:9px;">ไม้เริ่มต้น (1 หน่วย)</div><input type="number" id="base-unit" class="bet-input" value="100" oninput="resetBetting()"></div>
+        <div><div style="font-size:9px;">สูตรเดินเงิน</div><div style="color:#f1c40f; font-weight:bold; font-size:14px;">1 - 3 - 2 - 6</div></div>
+        <div style="background: rgba(46,204,113,0.15); border-radius: 6px;"><div style="font-size:9px; color:#2ecc71;">กำไรสะสม</div><div id="pnl" style="font-weight:bold; color:#2ecc71; font-size:16px;">0</div></div>
     </div>
 
     <div class="zone bet-info-zone" style="margin-top:-8px; border-top:none;">
         <div><div style="font-size:9px;">เป้า %</div><input type="number" id="goal-pct" class="bet-input" value="10" onchange="calcGoal()"></div>
         <div><div style="font-size:9px;">เป้าบาท</div><div id="goal-amt" style="font-weight:bold; color:#3498db; font-size:16px;">100</div></div>
         <div style="grid-column: span 2; background: rgba(241,196,15,0.15); border-radius: 6px;">
-            <div style="font-size:9px; color:#f1c40f;">ตาถัดไปให้วาง</div>
+            <div style="font-size:9px; color:#f1c40f;">ตาถัดไปวางเดิมพัน</div>
             <div id="next-bet-display" style="font-size:22px; font-weight:900; color:#f1c40f;">100</div>
+            <div id="step-indicator">STEP: <span id="s1" class="active-step">1</span> - <span id="s2">3</span> - <span id="s3">2</span> - <span id="s4">6</span></div>
         </div>
     </div>
 
-    <!-- ปุ่มเลือกไพ่ -->
     <div class="zone dealer-zone">
         <div style="font-size:11px; margin-bottom:4px; color:#3498db; font-weight:bold;">🕵️ เจ้ามือ</div>
         <div class="btn-group" id="dealer-btns"></div>
@@ -89,7 +89,6 @@
         <div class="btn-group" id="p2-btns"></div>
     </div>
 
-    <!-- กรอบแสดงผล -->
     <div id="display-box" class="display-area hit">
         <p id="result-text" style="font-size:30px; font-weight:900; margin:0;">พร้อมเล่น</p>
         <div id="total-display">0</div>
@@ -98,30 +97,35 @@
         <div class="inner-controls">
             <button class="btn-action" style="background:#27ae60;" onclick="handleRes(true)">✅ ชนะ</button>
             <button class="btn-action" style="background:#e74c3c;" onclick="handleRes(false)">❌ แพ้</button>
-            <button class="btn-action" style="background:#444;" onclick="resetCards()">🔄 ล้างจอ</button>
+            <button class="btn-action" style="background:#444;" onclick="resetCards()">🔄 ล้างไพ่</button>
+            <button class="btn-action" style="background:#c0392b;" onclick="fullReset()">💰 ล้างเงิน</button>
         </div>
     </div>
 
-    <div style="font-size:11px; color:#888; margin-bottom:4px; font-weight:bold;">➕ จั่วใบเพิ่ม</div>
+    <div style="font-size:11px; color:#888; margin-bottom:4px; font-weight:bold;">➕ จั่วเพิ่ม</div>
     <div class="btn-group" id="extra-btns"></div>
 
-    <!-- ชื่อโปรแกรม -->
     <div class="footer-text sparkle-text">BUGNIL BLACKSKIN PRO</div>
 </div>
 
 <script>
-    // ชุดตัวเลขที่ต้องใช้สร้างปุ่ม (ห้ามลบ)
-    const cardList = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
+    const cardList =;
     let state = { d: 2, p1: 2, p2: 2, ex: [] };
-    let pnlAmt = 0, targetAmt = 100, currentBet = 100;
+    let pnlAmt = 0, targetAmt = 100;
+    
+    // ระบบ 1-3-2-6
+    const strategy = [1, 3, 2, 6];
+    let currentStep = 0; // 0, 1, 2, 3
 
-    function autoCalcBet() {
-        let b1 = parseInt(document.getElementById('bet1').value) || 0;
-        let b2 = b1 * 2;
-        document.getElementById('bet2').value = b2;
-        currentBet = b1;
-        document.getElementById('next-bet-display').innerText = currentBet;
-        calcGoal();
+    function updateBetDisplay() {
+        let unit = parseInt(document.getElementById('base-unit').value) || 0;
+        let nextBet = unit * strategy[currentStep];
+        document.getElementById('next-bet-display').innerText = nextBet;
+        
+        // Update Indicator
+        for(let i=1; i<=4; i++) {
+            document.getElementById('s'+i).className = (currentStep === i-1) ? 'active-step' : '';
+        }
     }
 
     function createBtns(id, key, isExtra = false) {
@@ -155,10 +159,10 @@
 
         if (total > 21) { msg = "แตก!"; cl = "stand"; reason = "หยุดเล่น"; }
         else if (isPair) {
-            if (state.p1 === 8 || state.p1 === 11) { msg = "แยกไพ่!!!"; cl = "split"; reason = "กฎเหล็ก: ต้องแยก"; }
-            else if (state.p1 === 10) { msg = "พอแล้ว"; cl = "stand"; reason = "20 แต้มสูงมาก"; }
+            if (state.p1 === 8 || state.p1 === 11) { msg = "แยกไพ่!!!"; cl = "split"; reason = "กฎเหล็ก"; }
+            else if (state.p1 === 10) { msg = "พอแล้ว"; cl = "stand"; reason = "20 สูงแล้ว"; }
             else { msg = (d <= 7) ? "แยกไพ่" : "จั่วต่อ"; cl = (d <= 7 ? "split" : "hit"); reason = (d <= 7) ? "เจ้ามืออ่อน" : "จั่วสู้"; }
-        } else if (total === 16 && d >= 9) { msg = "ยอมแพ้"; cl = "surrender"; reason = "เสียครึ่งรักษาทุน"; }
+        } else if (total === 16 && d >= 9) { msg = "ยอมแพ้"; cl = "surrender"; reason = "รักษาทุน"; }
         else if (total >= 17) { msg = "พอแล้ว"; cl = "stand"; reason = "รอเจ้ามือแตก"; }
         else if (total === 11 && hand.length === 2) { msg = "ทบเงิน"; cl = "double"; reason = "ลุ้น 21"; }
         else {
@@ -174,27 +178,37 @@
     }
 
     function handleRes(win) {
-        let b1 = parseInt(document.getElementById('bet1').value) || 0;
-        let b2 = parseInt(document.getElementById('bet2').value) || 0;
-        if (win) { pnlAmt += currentBet; currentBet = b2; }
-        else { pnlAmt -= currentBet; currentBet = b1; }
+        let unit = parseInt(document.getElementById('base-unit').value) || 0;
+        let currentBet = unit * strategy[currentStep];
+
+        if (win) {
+            pnlAmt += currentBet;
+            currentStep++; // ไปไม้ถัดไป
+            if (currentStep > 3) currentStep = 0; // ชนะครบเซ็ต กลับเริ่มใหม่
+        } else {
+            pnlAmt -= currentBet;
+            currentStep = 0; // แพ้แล้วกลับเริ่มไม้ 1
+        }
+        
         document.getElementById('pnl').innerText = pnlAmt;
         document.getElementById('pnl').style.color = pnlAmt >= 0 ? "#2ecc71" : "#ff4757";
-        document.getElementById('next-bet-display').innerText = currentBet;
-        if (pnlAmt >= targetAmt) { document.getElementById('pnl-locked').innerText = "+" + pnlAmt; document.getElementById('lockdown').style.display = 'flex'; }
+        updateBetDisplay();
+        
+        if (pnlAmt >= targetAmt) {
+            document.getElementById('pnl-locked').innerText = "+" + pnlAmt;
+            document.getElementById('lockdown').style.display = 'flex';
+        }
         resetCards();
     }
 
+    function resetBetting() { currentStep = 0; updateBetDisplay(); calcGoal(); }
+    function fullReset() { pnlAmt = 0; document.getElementById('pnl').innerText = "0"; document.getElementById('pnl').style.color = "#2ecc71"; resetBetting(); }
     function resetCards() { state.ex = []; update(); }
     function calcGoal() { targetAmt = Math.floor(parseInt(document.getElementById('bankroll').value) * (parseInt(document.getElementById('goal-pct').value)/100)); document.getElementById('goal-amt').innerText = targetAmt; }
     function unlock() { document.getElementById('lockdown').style.display = 'none'; targetAmt += 500; }
 
-    createBtns('dealer-btns', 'd'); 
-    createBtns('p1-btns', 'p1'); 
-    createBtns('p2-btns', 'p2'); 
-    createBtns('extra-btns', null, true);
-    autoCalcBet();
-    update();
+    createBtns('dealer-btns', 'd'); createBtns('p1-btns', 'p1'); createBtns('p2-btns', 'p2'); createBtns('extra-btns', null, true);
+    resetBetting(); update();
 </script>
 </body>
 </html>
